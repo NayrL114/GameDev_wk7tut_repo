@@ -24,8 +24,14 @@ public class Tweener : MonoBehaviour
             if (Vector3.Distance(activeTween.Target.position, activeTween.EndPos) > 0.1f)
             {
                 //Debug.Log("First Condition");
-                activeTween.Target.position = Vector3.Lerp(activeTween.StartPos, activeTween.EndPos, timer / activeTween.Duration);
+                //activeTween.Target.position = Vector3.Lerp(activeTween.StartPos, activeTween.EndPos, timer / activeTween.Duration);
                 // Relative distance will be (current distance away from starting point ) / (total distance)
+
+                float fractionTime = timer / activeTween.Duration;
+                activeTween.Target.position = Vector3.Lerp(activeTween.StartPos, activeTween.EndPos, fractionTime * fractionTime * fractionTime);
+                // Cubic easing in: function (t,b,c,d) t /= d; return c*t*t*t + b;
+                // t = current time; b = start value; c = change in value; d = duration;
+
                 /*
                 activeTween.Target.position = Vector3.Lerp(
                     activeTween.StartPos,
@@ -49,4 +55,5 @@ public class Tweener : MonoBehaviour
     {
         if (activeTween == null) activeTween = new Tween(targetObject, startPos, endPos, Time.time, duration);
     }
+
 }
