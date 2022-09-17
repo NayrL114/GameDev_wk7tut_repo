@@ -69,6 +69,7 @@ public class InputManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log("Adding new box");
             GameObject itemClone = Instantiate(item, new Vector3(0.0f, 0.5f, 0.0f), item.transform.rotation);
             itemList.Add(itemClone);
             keyText.text = "Space";
@@ -84,11 +85,11 @@ public class InputManager : MonoBehaviour
         {
             if (tweener.AddTween(itemList[i].GetComponent<Transform>(), itemList[i].GetComponent<Transform>().position, endPos, duration))// if AddTween returns true
             {
-                Debug.Log("supposely a tween should be added successfully");
+                //Debug.Log("supposely a tween should be added successfully");
                 i = itemList.Count;
                 //break;
             }
-            Debug.Log(i + " and itemList count is " + itemList.Count);
+            //Debug.Log(i + " and itemList count is " + itemList.Count);
             // else, do nothing if AddTween returns false
         }
                         

@@ -22,36 +22,44 @@ public class Tweener : MonoBehaviour
         //if (activeTween != null)
         if (activeTweens.Count > 0)
         {
-            foreach (Tween t in activeTweens)
+            //foreach (Tween t in activeTweens)
+            for (int a = 0; a < activeTweens.Count; a++)// a normal for loop for convenient remove element operation
             {
                 //timer += Time.deltaTime;
-                if (Vector3.Distance(t.Target.position, t.EndPos) > 0.1f)
+                //if (Vector3.Distance(t.Target.position, t.EndPos) > 0.1f)
+                if (Vector3.Distance(activeTweens[a].Target.position, activeTweens[a].EndPos) > 0.1f)
                 {
                     //Debug.Log("First Condition");
                     //activeTween.Target.position = Vector3.Lerp(activeTween.StartPos, activeTween.EndPos, timer / activeTween.Duration);
                     // Relative distance will be (current distance away from starting point ) / (total distance)
 
                     //float fractionTime = timer / t.Duration;
+                    /*
                     float fractionTime = (Time.time - t.StartTime) / t.Duration;
                     t.Target.position = Vector3.Lerp(t.StartPos, t.EndPos, fractionTime * fractionTime * fractionTime);
+                    */
                     // Cubic easing in: function (t,b,c,d) t /= d; return c*t*t*t + b;
                     // t = current time; b = start value; c = change in value; d = duration;
 
-                    /*
-                    activeTween.Target.position = Vector3.Lerp(
-                        activeTween.StartPos,
-                        activeTween.EndPos,
-                        Vector3.Distance(activeTween.Target.position, activeTween.StartPos) / Vector3.Distance(activeTween.StartPos, activeTween.EndPos)
-                        );
-                    */
+                    float fractionTime = (Time.time - activeTweens[a].StartTime) / activeTweens[a].Duration;
+                    activeTweens[a].Target.position = Vector3.Lerp(activeTweens[a].StartPos, activeTweens[a].EndPos, fractionTime * fractionTime * fractionTime);
+
+                    
                 }
-                else if (Vector3.Distance(t.Target.position, t.EndPos) <= 0.1f)
+                else if (Vector3.Distance(activeTweens[a].Target.position, activeTweens[a].EndPos) <= 0.1f)
+                //else if (Vector3.Distance(t.Target.position, t.EndPos) <= 0.1f)
                 {
+                    /*
                     //Debug.Log("Second Condition");
                     t.Target.position = t.EndPos;
                     //activeTween = null;
                     activeTweens.Remove(t);
-                    //timer = 0;
+                    */
+
+                    activeTweens[a].Target.position = activeTweens[a].EndPos;
+                    //activeTween = null;
+                    activeTweens.RemoveAt(a);
+                    a--;// move the iterator 1 position back to ensure the for loop will reach the correct next position
                 }
             }
             
@@ -68,21 +76,21 @@ public class Tweener : MonoBehaviour
 
     public bool AddTween(Transform targetObject, Vector3 startPos, Vector3 endPos, float duration)
     {
-        Debug.Log("inside AddTween()");
+        //Debug.Log("inside AddTween()");
         if (activeTweens.Count == 0)
         {
-            Debug.Log("list if empty, adding object");
+            //Debug.Log("list if empty, adding object");
             activeTweens.Add(new Tween(targetObject, startPos, endPos, Time.time, duration));
             return true;
         }
         else if (TweenExists(targetObject))// if false
         {
-            Debug.Log("inside AddTween() first if");
+            //Debug.Log("inside AddTween() first if");
             return false;
         }
         else
         {
-            Debug.Log("inside AddTween() second if");
+            //Debug.Log("inside AddTween() second if");
             activeTweens.Add(new Tween(targetObject, startPos, endPos, Time.time, duration));
             return true;
         }
@@ -91,13 +99,13 @@ public class Tweener : MonoBehaviour
 
     public bool TweenExists(Transform target)
     {
-        Debug.Log("inside TweenExists()");
+        //Debug.Log("inside TweenExists()");
         for (int i = 0; i < activeTweens.Count; i++)
         {
-            Debug.Log("inside TweenExists() for loop");
+            //Debug.Log("inside TweenExists() for loop");
             if (target == activeTweens[i].Target)
             {
-                Debug.Log("inside TweenExists() if loop");
+                //Debug.Log("inside TweenExists() if loop");
                 return true;
             }
         }
